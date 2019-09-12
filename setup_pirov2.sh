@@ -21,7 +21,7 @@ chmod a+x /usr/local/bin/rmate
 echo "Installing v4l2 modules"
 apt-get install libv4l-dev v4l-utils -y
 
-#install git client
+#install git client only needed if you haven't installed git
 echo "Installing Git"
 apt-get install git -y
 

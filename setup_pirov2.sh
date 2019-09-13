@@ -19,11 +19,11 @@ chmod a+x /usr/local/bin/rmate
 
 #install v4l2, main driver to capture images from camera module
 echo "Installing v4l2 modules"
-apt-get install libv4l-dev v4l-utils -y
+sudo apt-get install libv4l-dev v4l-utils -y
 
 #install git client only needed if you haven't installed git
 echo "Installing Git"
-apt-get install git -y
+sudo apt-get install git -y
 
 #install alsa sound drivers
 echo "Installing alsa sound"
@@ -32,41 +32,41 @@ sudo apt-get install alsa-utils mpg321 lame -y
 #install Nodejs 11
 echo "Installing Nodejs 11"
 curl -sL https://deb.nodesource.com/setup_11.x | bash -
-apt-get install nodejs build-essential npm node-semver -y
+sudo apt-get install nodejs build-essential npm node-semver -y
 
 #install pigpio to control onboard GPIO pins and setup demon, pigpio modules uses BCM pin maps
 echo "Installing pigpio"
-apt-get install pigpio -y
+sudo apt-get install pigpio -y
 sudo systemctl disable pigpiod
 sudo systemctl stop pigpiod
 
 #install ffmpeg with ffserver , version 3.4.6
 echo "Installing ffmpeg@3.4.6 with ffserver"
-apt-get install libasound2-dev libmp3lame-dev libx264-dev -y
+sudo apt-get install libasound2-dev libmp3lame-dev libx264-dev -y
 cd /usr/local/bin
 wget -O ./ffmpeg-3.4.6.tar.bz2 https://ffmpeg.org/releases/ffmpeg-3.4.6.tar.bz2
 tar -xvf ffmpeg-3.4.6.tar.bz2
 cd ffmpeg-3.4.6
 ./configure --arch=armel --target-os=linux --enable-gpl --enable-libx264 --enable-nonfree --enable-indev=alsa --enable-outdev=alsa --enable-omx --enable-omx-rpi --enable-mmal --enable-libmp3lame --enable-decoder=h264_mmal --enable-decoder=mpeg2_mmal --enable-encoder=h264_omx
-#For RPi = v3
+##For RPi = v3
 make -j4
-#For RPi < v3
-#make
+##For RPi < v3
+##sudo make
 make install
-cd $homedir
 
 #Go back to home directory and install pirov2 server
-echo "Installing pirov2 at $homedir"
+echo "Installing pirov2 at $HOME"
+cd $HOME
 git clone https://github.com/gnshshraiGit/pirov2.git
 cd pirov2
-sudo npm install 
+npm install 
 mkdir recordings
-cd $homedir
 
 #Demonize pirov2 server, if user is other than pi please change user name in pirov2.service line 10 
 echo "Demonizing pirov2"
 
-sed "/Service/a\Environment="""pirov2dir=$homedir"""\nUser=$crntuser" pirov2.service.conf > pirov2.service
+cd $homedir
+sed "/Service/a\Environment="""pirov2dir=$HOME"""\nUser=$crntuser" pirov2.service.conf > pirov2.service
 sudo cp pirov2.service /etc/systemd/system/pirov2.service
 sudo systemctl enable pirov2.service
 sudo systemctl start pirov2.service

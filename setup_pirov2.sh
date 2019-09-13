@@ -7,8 +7,8 @@ raspi-config
 
 #install update to base raspbian image.
 echo "Installing updates"
-apt-get update
-apt-get upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
 #Optional : Install rmate to remotely work with visual studio code, 
 #ref: https://medium.com/@prtdomingo/editing-files-in-your-linux-virtual-machine-made-a-lot-easier-with-remote-vscode-6bb98d0639a4
@@ -36,7 +36,7 @@ apt-get install nodejs build-essential npm node-semver -y
 
 #install pigpio to control onboard GPIO pins and setup demon, pigpio modules uses BCM pin maps
 echo "Installing pigpio"
-#apt-get install pigpio -y
+apt-get install pigpio -y
 sudo systemctl disable pigpiod
 sudo systemctl stop pigpiod
 
@@ -50,8 +50,8 @@ cd ffmpeg-3.4.6
 ./configure --arch=armel --target-os=linux --enable-gpl --enable-libx264 --enable-nonfree --enable-indev=alsa --enable-outdev=alsa --enable-omx --enable-omx-rpi --enable-mmal --enable-libmp3lame --enable-decoder=h264_mmal --enable-decoder=mpeg2_mmal --enable-encoder=h264_omx
 #For RPi = v3
 make -j4
-##For RPi < v3
-##make
+#For RPi < v3
+#make
 make install
 cd $homedir
 
@@ -59,14 +59,15 @@ cd $homedir
 echo "Installing pirov2 at $homedir"
 git clone https://github.com/gnshshraiGit/pirov2.git
 cd pirov2
-mkdir recordings
 sudo npm install 
-
+mkdir recordings
+cd $homedir
 
 #Demonize pirov2 server, if user is other than pi please change user name in pirov2.service line 10 
 echo "Demonizing pirov2"
+
 sed "/Service/a\Environment="""pirov2dir=$homedir"""\nUser=$crntuser" pirov2.service.conf > pirov2.service
-sudo cp ./pirov2.service /etc/systemd/system/pirov2.service
+sudo cp pirov2.service /etc/systemd/system/pirov2.service
 sudo systemctl enable pirov2.service
 sudo systemctl start pirov2.service
 
@@ -74,6 +75,6 @@ sudo systemctl start pirov2.service
 echo "Configuring ffserver"
 sudo cp ffserver.conf /etc/ffserver.conf
 
-#Reboot
-echo "All done now restarting"
+# Cleanup and Reboot
+echo "All done now clean and restarting"
 sudo reboot

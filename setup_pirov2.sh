@@ -3,7 +3,7 @@
 homedir=`pwd`
 crntuser=`whoami`
 #Enable Camera and I2C interface to disable red camera led manually append disable_camera_led=1 to /boot/config.txt
-raspi-config
+sudo raspi-config
 
 #install update to base raspbian image.
 echo "Installing updates"
@@ -14,8 +14,8 @@ sudo apt-get upgrade -y
 #ref: https://medium.com/@prtdomingo/editing-files-in-your-linux-virtual-machine-made-a-lot-easier-with-remote-vscode-6bb98d0639a4
 
 echo "Installing rmate client"
-wget -O /usr/local/bin/rmate https://raw.github.com/aurora/rmate/master/rmate
-chmod a+x /usr/local/bin/rmate
+sudo wget -O /usr/local/bin/rmate https://raw.github.com/aurora/rmate/master/rmate
+sudo chmod a+x /usr/local/bin/rmate
 
 #install v4l2, main driver to capture images from camera module
 echo "Installing v4l2 modules"
@@ -31,7 +31,7 @@ sudo apt-get install alsa-utils mpg321 lame -y
 
 #install Nodejs 11
 echo "Installing Nodejs 11"
-curl -sL https://deb.nodesource.com/setup_11.x | bash -
+sudo curl -sL https://deb.nodesource.com/setup_11.x | bash -
 sudo apt-get install nodejs build-essential npm node-semver -y
 
 #install pigpio to control onboard GPIO pins and setup demon, pigpio modules uses BCM pin maps
@@ -44,15 +44,15 @@ sudo systemctl stop pigpiod
 echo "Installing ffmpeg@3.4.6 with ffserver"
 sudo apt-get install libasound2-dev libmp3lame-dev libx264-dev -y
 cd /usr/local/bin
-wget -O ./ffmpeg-3.4.6.tar.bz2 https://ffmpeg.org/releases/ffmpeg-3.4.6.tar.bz2
-tar -xvf ffmpeg-3.4.6.tar.bz2
+sudo wget -O ./ffmpeg-3.4.6.tar.bz2 https://ffmpeg.org/releases/ffmpeg-3.4.6.tar.bz2
+sudo tar -xvf ffmpeg-3.4.6.tar.bz2
 cd ffmpeg-3.4.6
 ./configure --arch=armel --target-os=linux --enable-gpl --enable-libx264 --enable-nonfree --enable-indev=alsa --enable-outdev=alsa --enable-omx --enable-omx-rpi --enable-mmal --enable-libmp3lame --enable-decoder=h264_mmal --enable-decoder=mpeg2_mmal --enable-encoder=h264_omx
 ##For RPi = v3
-make -j4
+sudo make -j4
 ##For RPi < v3
-##sudo make
-make install
+##make
+sudo make install
 
 #Go back to home directory and install pirov2 server
 echo "Installing pirov2 at $HOME"

@@ -2,15 +2,19 @@
 #Script to setup environment for pirov2 and make Rpi ready to run pirov2 server
 homedir=`pwd`
 crntuser=`whoami`
-#Enable Camera and I2C interface to disable red camera led manually append disable_camera_led=1 to /boot/config.txt
+#Enable Camera and I2C interface
 sudo raspi-config
+
+#Disabling Camera led by appending disable_camera_led=1 to /boot/config.txt
+echo "Disabling camera led"
+echo "disable_camera_led=1" | sudo tee -a /boot/config.txt
 
 #install update to base raspbian image.
 echo "Installing updates"
 sudo apt-get update
 sudo apt-get upgrade -y
 
-#Optional : Install rmate to remotely work with visual studio code, 
+#Optional : Install rmate to remotely work with visual studio code
 #ref: https://medium.com/@prtdomingo/editing-files-in-your-linux-virtual-machine-made-a-lot-easier-with-remote-vscode-6bb98d0639a4
 
 echo "Installing rmate client"

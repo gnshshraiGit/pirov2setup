@@ -17,7 +17,7 @@ sudo apt-get upgrade -y
 #Optional : Install rmate to remotely work with visual studio code
 #ref: https://medium.com/@prtdomingo/editing-files-in-your-linux-virtual-machine-made-a-lot-easier-with-remote-vscode-6bb98d0639a4
 
-echo "Installing rmate client"
+#echo "Installing rmate client"
 sudo wget -O /usr/local/bin/rmate https://raw.github.com/aurora/rmate/master/rmate
 sudo chmod a+x /usr/local/bin/rmate
 
@@ -52,10 +52,10 @@ sudo wget -O ./ffmpeg-3.4.6.tar.bz2 https://ffmpeg.org/releases/ffmpeg-3.4.6.tar
 sudo tar -xvf ffmpeg-3.4.6.tar.bz2
 cd ffmpeg-3.4.6
 ./configure --arch=armel --target-os=linux --enable-gpl --enable-libx264 --enable-nonfree --enable-indev=alsa --enable-outdev=alsa --enable-omx --enable-omx-rpi --enable-mmal --enable-libmp3lame --enable-decoder=h264_mmal --enable-decoder=mpeg2_mmal --enable-encoder=h264_omx
-##For RPi = v3
+#For RPi = v3
 sudo make -j4
-##For RPi < v3
-##make
+#For RPi < v3
+#sudo make
 sudo make install
 
 #Go back to home directory and install pirov2 server
@@ -68,9 +68,8 @@ mkdir recordings
 
 #Demonize pirov2 server, if user is other than pi please change user name in pirov2.service line 10 
 echo "Demonizing pirov2"
-
 cd $homedir
-sed "/Service/a\Environment="""pirov2dir=$HOME"""\nUser=$crntuser" pirov2.service.conf > pirov2.service
+sed "/Service/a\Environment=\""pirov2dir=$HOME"\"\nUser=$crntuser" pirov2.service.conf > pirov2.service
 sudo cp pirov2.service /etc/systemd/system/pirov2.service
 sudo systemctl enable pirov2.service
 sudo systemctl start pirov2.service
@@ -82,3 +81,4 @@ sudo cp ffserver.conf /etc/ffserver.conf
 # Cleanup and Reboot
 echo "All done now clean and restarting"
 sudo reboot
+
